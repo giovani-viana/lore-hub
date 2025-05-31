@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Modelo de Usuário
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  characters    Characters[]
+  campaigns     Campaign[]    // Usuário pode participar de várias campanhas
+  masterOf      Campaign? @relation("CampaignMaster") // Relação inversa para o mestre da campanha
+}
+
+// Modelo de Personagens
+model Characters {
+  id          String       @id @default(cuid())
+  name        String
+  picture     String
+  slug        String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  author      User         @relation(fields: [authorId], references: [id])
+  authorId    String
+  campaign    Campaign     @relation(fields: [campaignId], references: [id])
+  campaignId  String
+  attributes  Attribute[]  // Lista de atributos personalizáveis
+  inventory   Inventory[]  // Lista de itens no inventário
+}
+
+// Modelo de Campanha
+model Campaign {
+  id          String       @id @default(cuid())
+  title       String
+  description String       @db.Text
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  players     User[]
+  characters  Characters[]
+  master      User         @relation("CampaignMaster", fields: [masterId], references: [id])
+  masterId    String       @unique // Campo para o ID do usuário mestre (criador)
+}
+
+// Modelo de Atributos
+model Attribute {
+  id          String       @id @default(cuid())
+  name        String
+  value       String
+  password    String?      // Campo opcional para senha
+  visibility  Visibility   @default(CAMPAIGN_PLAYERS) // Nível de visibilidade
+  character   Characters   @relation(fields: [characterId], references: [id])
+  characterId String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+// Modelo de Inventário
+model Inventory {
+  id          String       @id @default(cuid())
+  name        String
+  description String?      @db.Text
+  quantity    Int          @default(1)
+  visibility  Visibility   @default(CAMPAIGN_PLAYERS) // Nível de visibilidade
+  password    String?      // Campo opcional para senha
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  character   Characters   @relation(fields: [characterId], references: [id])
+  characterId String
+}
+
+// Enum para roles de usuário
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+// Enum para níveis de visibilidade
+enum Visibility {
+  // Visível para o mestre da campanha e o autor (dono do personagem)
+  MASTER_AND_OWNER
+  // Visível para todos os jogadores da campanha
+  CAMPAIGN_PLAYERS
+  // Visível para todos os jogadores da campanha, requer senha para outros jogadores que não sejam mestre/autor
+  PASSWORD_PROTECTED
+} 

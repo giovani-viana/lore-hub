@@ -2,16 +2,20 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 
-export default async function Home() {
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const session = await getServerSession(authOptions)
 
   if (!session) {
     redirect('/login')
   }
 
-  if (session.user.role === 'ADMIN') {
-    redirect('/admin')
-  }
-
-  redirect('/user/dashboard')
-}
+  return (
+    <div className="min-h-screen bg-black">
+      {children}
+    </div>
+  )
+} 

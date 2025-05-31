@@ -1,24 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lore Hub
 
-## Getting Started
+Uma plataforma moderna de conhecimento construída com Next.js.
 
-First, run the development server:
+## Estrutura do Projeto
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+lore-hub/
+├── app/                      # Diretório principal do Next.js
+│   ├── (auth)/              # Grupo de rotas autenticadas
+│   │   ├── dashboard/       # Páginas do dashboard
+│   │   └── profile/         # Páginas de perfil
+│   ├── api/                 # Rotas da API (backend)
+│   │   ├── auth/           # Endpoints de autenticação
+│   │   └── [resource]/     # Outros endpoints da API
+│   ├── components/         # Componentes reutilizáveis
+│   │   ├── ui/            # Componentes de UI básicos
+│   │   └── features/      # Componentes específicos de features
+│   ├── lib/               # Utilitários e configurações
+│   │   ├── utils/        # Funções utilitárias
+│   │   └── config/       # Configurações do app
+│   ├── hooks/            # Custom hooks
+│   ├── styles/           # Estilos globais e temas
+│   ├── types/            # Definições de tipos TypeScript
+│   ├── services/         # Serviços e integrações
+│   │   ├── api/         # Clientes de API
+│   │   └── external/    # Integrações externas
+│   ├── store/           # Gerenciamento de estado
+│   └── middleware.ts    # Middleware do Next.js
+├── prisma/              # Schema e migrações do Prisma
+├── public/             # Arquivos estáticos
+├── tests/              # Testes
+│   ├── unit/          # Testes unitários
+│   ├── integration/   # Testes de integração
+│   └── e2e/           # Testes end-to-end
+└── docs/              # Documentação do projeto
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tecnologias Utilizadas
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js 13+
+- TypeScript
+- Tailwind CSS
+- Prisma (ORM)
+- Jest (Testes)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Como Iniciar
+
+1. Clone o repositório
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+3. Configure as variáveis de ambiente:
+   ```bash
+   cp .env.example .env.local
+   ```
+4. Inicie o servidor de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
+
+## Scripts Disponíveis
+
+- `npm run dev` - Inicia o servidor de desenvolvimento
+- `npm run build` - Cria a build de produção
+- `npm start` - Inicia o servidor de produção
+- `npm run test` - Executa os testes
+- `npm run lint` - Executa o linter
+
+## Contribuição
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
 
 ## Learn More
 
